@@ -44,6 +44,47 @@ Build the current desktop platform:
 npm run tauri build
 ```
 
+## macOS
+
+Requirements:
+
+- macOS with [Xcode Command Line Tools](https://developer.apple.com/xcode/) (`xcode-select --install`)
+- Rust stable with the Darwin target for your architecture:
+
+```sh
+rustup target add aarch64-apple-darwin x86_64-apple-darwin
+```
+
+Run in development mode:
+
+```sh
+npm install
+npm run tauri dev
+```
+
+Build a release bundle for the host architecture (Apple Silicon or Intel):
+
+```sh
+npm run tauri build
+```
+
+Artifacts are written to:
+
+```text
+src-tauri/target/release/bundle/macos/Research Assistant.app
+src-tauri/target/release/bundle/dmg/Research Assistant_0.1.0_aarch64.dmg
+```
+
+Build a universal binary that runs on both Apple Silicon and Intel (requires both Darwin targets from above):
+
+```sh
+npm run tauri build -- --target universal-apple-darwin
+```
+
+Local unsigned builds run fine on the machine that built them. To distribute the `.app` or `.dmg`, sign and notarize it with an Apple Developer certificate by providing `APPLE_SIGNING_IDENTITY` (and, for notarization, an App Store Connect API key) to the bundler — see the [Tauri macOS code signing guide](https://v2.tauri.app/distribute/signing/macos/). The bundle identifier is `com.rramaa.researchassistant` (`src-tauri/tauri.conf.json`).
+
+To generate the Swift bindings for direct native use on macOS, see [UniFFI Bindings](#uniffi-bindings).
+
 ## Mobile
 
 Install the Tauri mobile prerequisites before initializing a platform. Android can be initialized on Linux, macOS, or Windows. iOS requires macOS and Xcode.
